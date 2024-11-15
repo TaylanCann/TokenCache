@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenCache", "TokenCache\TokenCache.csproj", "{97B52DE8-2CAB-466E-A490-4D79B621072A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenCache.Cache", "TokenCache.Cache\TokenCache.Cache.csproj", "{9037D5A4-4F30-46AC-9649-CC736A417D3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6E85C7C-3684-40B6-8B85-B43DC9D536BF}
+	EndGlobalSection
+EndGlobal
