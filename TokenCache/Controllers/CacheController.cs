@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TokenCache.Cache.Interfaces;
+using TokenCache.Models;
 
 namespace TokenCache.Controllers
 {
