@@ -12,12 +12,12 @@ namespace TokenCache.Cache.Services
     {
         private readonly IConnectionMultiplexer _redisConnection;
         private readonly IDatabase _cache;
-        public RedisCacheService(IConnectionMultiplexer redisConnection) 
+        public RedisCacheService(IConnectionMultiplexer redisConnection)
         {
             _redisConnection = redisConnection;
             _cache = redisConnection.GetDatabase();
         }
-        
+
         public async Task ClearAsync(string key)
         {
             await _cache.KeyDeleteAsync(key);

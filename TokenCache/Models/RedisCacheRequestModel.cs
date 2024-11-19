@@ -1,4 +1,4 @@
-﻿namespace TokenCache
+﻿namespace TokenCache.Models
 {
     public class RedisCacheRequestModel
     {
