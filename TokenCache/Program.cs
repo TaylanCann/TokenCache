@@ -5,6 +5,8 @@ using StackExchange.Redis;
 using System.Text;
 using TokenCache.Cache.Interfaces;
 using TokenCache.Cache.Services;
+using TokenCache.Interfaces;
+using TokenCache.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,20 +16,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opts =>
-    {
-        byte[] signingKey = Encoding.UTF8
-         .GetBytes(builder.Configuration.GetSection("JwtTokenOptions")["SigningKey"]);
 
-        opts.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = builder.Configuration.GetSection("JwtTokenOptions")["Issuer"],
-            ValidAudience = builder.Configuration.GetSection("JwtTokenOptions")["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(signingKey)
-        };
-    });
 builder.Services.AddAuthorization();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
