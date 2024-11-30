@@ -4,6 +4,6 @@ namespace TokenCache.Interfaces
 {
     public interface ITokenService
     {
-        public Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request);
+        public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request);
     }
 }

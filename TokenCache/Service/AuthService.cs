@@ -23,7 +23,7 @@ namespace TokenCache.Service
 
             if (request.Username=="Taylan" && request.Password=="123")
             {
-                var generatedTokenInformation = await _tokenService.GenerateToken(new GenerateTokenRequest { Username = request.Username });
+                var generatedTokenInformation = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest { Username = request.Username });
 
                 response.AuthenticateResult = true;
                 response.AuthToken = generatedTokenInformation.Token;

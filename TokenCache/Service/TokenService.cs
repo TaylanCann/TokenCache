@@ -16,7 +16,7 @@ namespace TokenCache.Service
             _configuration = configuration;
         }
 
-        public Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request)
+        public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["AppSettings:Secret"]));
 
