@@ -29,7 +29,7 @@ namespace TokenCache.Service
                     new Claim("userName", request.Username)
                     },
                     notBefore: dateTimeNow,
-                    expires: dateTimeNow.Add(TimeSpan.FromMinutes(1)),
+                    expires: dateTimeNow.Add(TimeSpan.FromHours(1)),
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                 );
 

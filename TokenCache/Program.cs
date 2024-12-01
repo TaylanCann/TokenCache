@@ -6,13 +6,16 @@ using System.Text;
 using TokenCache.Cache.Interfaces;
 using TokenCache.Cache.Services;
 using TokenCache.Interfaces;
+using TokenCache.Models;
 using TokenCache.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.Configure<MongoDBSettings>(
+    builder.Configuration.GetSection("MongoDBSettings"));
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
