@@ -10,6 +10,9 @@ namespace TokenCache.Domain.Interfaces
     public interface IUserRepository
     {
         void Add(User user);
-        User GetByUsername(string username);
+        Task CreateAsync(User user);
+        Task<User> GetByUsernameAsync(string username);
+        Task<bool> UserExistsAsync(string username);
+
     }
 }

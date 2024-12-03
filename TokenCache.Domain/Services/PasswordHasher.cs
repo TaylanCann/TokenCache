@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TokenCache.Domain.Interfaces;
+using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Domain.Services
 {
@@ -16,7 +17,9 @@ namespace TokenCache.Domain.Services
 
         public string HashPassword(string plainTextPassword)
         {
-            
+            if (string.IsNullOrWhiteSpace(plainTextPassword))
+                throw new ArgumentException("Password cannot be empty.");
+
             using var rng = RandomNumberGenerator.Create();
             byte[] salt = new byte[_saltLength];
             rng.GetBytes(salt);
@@ -28,21 +31,19 @@ namespace TokenCache.Domain.Services
             Array.Copy(salt, 0, hashBytes, 0, _saltLength);
             Array.Copy(hash, 0, hashBytes, _saltLength, _hashLength);
 
-            return Convert.ToBase64String(hashBytes);
+            var hashString = Convert.ToBase64String(hashBytes);
+            return hashString; // Direkt Password nesnesi döndürülüyor
         }
 
         public bool VerifyPassword(string plainTextPassword, string storedHash)
         {
-            // Saklanan hash ve salt'i çözümle
             byte[] hashBytes = Convert.FromBase64String(storedHash);
             byte[] salt = new byte[_saltLength];
             Array.Copy(hashBytes, 0, salt, 0, _saltLength);
 
-            // Kullanıcıdan alınan şifre ile aynı hash'i oluştur
             using var hashAlgorithm = new Rfc2898DeriveBytes(plainTextPassword, salt, _iterations);
             byte[] hash = hashAlgorithm.GetBytes(_hashLength);
 
-            // Hesaplanan hash ile saklanan hash'i karşılaştır
             for (int i = 0; i < _hashLength; i++)
             {
                 if (hashBytes[i + _saltLength] != hash[i])
@@ -52,5 +53,6 @@ namespace TokenCache.Domain.Services
             return true;
         }
     }
+
 
 }
