@@ -12,6 +12,5 @@ namespace TokenCache.Application.Interfaces
     {
         Task<UserDto> RegisterAsync(string username, Password password);
         Task<UserDto> LoginAsync(string username, string password);
-        Task<bool> UserExistsAsync(string username);
     }
 }

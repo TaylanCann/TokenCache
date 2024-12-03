@@ -34,9 +34,7 @@ namespace TokenCache.Application.Services
                 return null;
 
             return new UserDto { Username = user.Username };
-        }
-
-       
+        }       
 
         public async Task<UserDto> RegisterAsync(string username, Password password)
         {
@@ -55,11 +53,6 @@ namespace TokenCache.Application.Services
             await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
 
             return token; // Token'ı geri döndür
-        }
-
-        public Task<bool> UserExistsAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
+        }       
     }
 }
