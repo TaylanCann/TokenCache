@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TokenCache.Application.Interfaces;
 
-namespace TokenCache.Application.Services
+namespace TokenCache.Infrastructure.Cache
 {
     public class RedisCacheService : IRedisCacheService
     {
@@ -23,7 +23,7 @@ namespace TokenCache.Application.Services
             await db.StringSetAsync(key, value, expiration);
         }
 
-        public async Task<string> GetAsync(string key)
+        public async Task<string?> GetAsync(string key)
         {
             var db = _redis.GetDatabase();
             return await db.StringGetAsync(key);
@@ -36,4 +36,3 @@ namespace TokenCache.Application.Services
         }
     }
 }
-

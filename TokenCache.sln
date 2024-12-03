@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache", "TokenCache\To
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Cache", "TokenCache.Cache\TokenCache.Cache.csproj", "{9037D5A4-4F30-46AC-9649-CC736A417D3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenCache.Domain", "TokenCache.Domain\TokenCache.Domain.csproj", "{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Domain", "TokenCache.Domain\TokenCache.Domain.csproj", "{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenCache.Application", "TokenCache.Application\TokenCache.Application.csproj", "{E7AB4695-EF14-4899-98C8-492D3AB0A63D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Application", "TokenCache.Application\TokenCache.Application.csproj", "{E7AB4695-EF14-4899-98C8-492D3AB0A63D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenCache.Infrastructure", "TokenCache.Infrastructure\TokenCache.Infrastructure.csproj", "{02692CE8-B03F-43F8-9F36-86216D2A38DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E7AB4695-EF14-4899-98C8-492D3AB0A63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7AB4695-EF14-4899-98C8-492D3AB0A63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7AB4695-EF14-4899-98C8-492D3AB0A63D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02692CE8-B03F-43F8-9F36-86216D2A38DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02692CE8-B03F-43F8-9F36-86216D2A38DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02692CE8-B03F-43F8-9F36-86216D2A38DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02692CE8-B03F-43F8-9F36-86216D2A38DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
