@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache", "TokenCache\TokenCache.csproj", "{97B52DE8-2CAB-466E-A490-4D79B621072A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Cache", "TokenCache.Cache\TokenCache.Cache.csproj", "{9037D5A4-4F30-46AC-9649-CC736A417D3F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Domain", "TokenCache.Domain\TokenCache.Domain.csproj", "{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenCache.Application", "TokenCache.Application\TokenCache.Application.csproj", "{E7AB4695-EF14-4899-98C8-492D3AB0A63D}"
@@ -23,10 +21,6 @@ Global
 		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97B52DE8-2CAB-466E-A490-4D79B621072A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9037D5A4-4F30-46AC-9649-CC736A417D3F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01ADA9B-F90A-4494-8EC4-A0A914A4E294}.Release|Any CPU.ActiveCfg = Release|Any CPU
