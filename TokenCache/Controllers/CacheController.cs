@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TokenCache.Cache.Interfaces;
+using TokenCache.Application.Interfaces;
 using TokenCache.Models;
 
 namespace TokenCache.Controllers
@@ -19,13 +19,13 @@ namespace TokenCache.Controllers
         [HttpGet("cache/{key}")]
         public async Task<IActionResult> Get(string key)
         {
-            return Ok(await _redisCacheService.GetValueAsync(key));
+            return Ok(await _redisCacheService.GetAsync(key));
         }
 
         [HttpPost("cache/set")]
         public async Task<IActionResult> Set([FromBody] RedisCacheRequestModel redisCacheRequestModel)
         {
-            await _redisCacheService.SetValueAsync(redisCacheRequestModel.Key, redisCacheRequestModel.Value);
+            await _redisCacheService.SetAsync(redisCacheRequestModel.Key, redisCacheRequestModel.Value, TimeSpan.FromHours(1));
             return Ok();
         }
 

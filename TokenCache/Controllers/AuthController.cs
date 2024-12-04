@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using TokenCache.Cache.Interfaces;
-using TokenCache.Cache.Services;
+using TokenCache.Application.Interfaces;
 using TokenCache.Interfaces;
 using TokenCache.Models;
 
@@ -28,7 +27,7 @@ namespace TokenCache.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<UserLoginResponse>> LoginUserAsync([FromBody] User request)
         {
-            var redisCheck = await _redisCacheService.GetValueAsync(request.Username);
+            var redisCheck = await _redisCacheService.GetAsync(request.Username);
 
             if (!redisCheck.IsNullOrEmpty())
             {
@@ -36,7 +35,7 @@ namespace TokenCache.Controllers
             }
 
             var result = await _authService.LoginUserAsync(request);
-            await _redisCacheService.SetValueAsync(request.Username, result.AuthToken);
+            await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
 
             return result;
         }

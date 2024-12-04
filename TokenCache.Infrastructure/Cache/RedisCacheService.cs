@@ -11,10 +11,13 @@ namespace TokenCache.Infrastructure.Cache
     public class RedisCacheService : IRedisCacheService
     {
         private readonly IConnectionMultiplexer _redis;
+        private readonly IDatabase _cache;
 
-        public RedisCacheService(IConnectionMultiplexer redis)
+
+        public RedisCacheService(IConnectionMultiplexer redis, IDatabase cache)
         {
             _redis = redis;
+            _cache = cache;
         }
 
         public async Task SetAsync(string key, string value, TimeSpan expiration)
@@ -33,6 +36,21 @@ namespace TokenCache.Infrastructure.Cache
         {
             var db = _redis.GetDatabase();
             return await db.KeyExistsAsync(key);
+        }
+
+        public async Task ClearAsync(string key)
+        {
+            await _cache.KeyDeleteAsync(key);
+        }
+
+        public void ClearAll()
+        {
+            var redisEndpoints = _redis.GetEndPoints(true);
+            foreach (var redisEndpoint in redisEndpoints)
+            {
+                var redisServer = _redis.GetServer(redisEndpoint);
+                redisServer.FlushAllDatabases();
+            }
         }
     }
 }

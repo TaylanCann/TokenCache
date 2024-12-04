@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using StackExchange.Redis;
 using System.Text;
-using TokenCache.Cache.Interfaces;
-using TokenCache.Cache.Services;
+using TokenCache.Application.Interfaces;
+using TokenCache.Domain.Interfaces;
+using TokenCache.Infrastructure.Cache;
+using TokenCache.Infrastructure.Repositories;
 using TokenCache.Interfaces;
 using TokenCache.Models;
 using TokenCache.Service;
@@ -19,13 +22,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IMongoClient>(sp =>
+    new MongoClient("mongodb://localhost:27017")); // MongoDB baðlantý URI'si
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheDb")); // Veritabaný adý
+
+
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect("localhost")); // Redis baðlantýsý
 
 builder.Services.AddAuthorization();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<ITokenService, TokenService>();
+//builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
