@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TokenCache.Application\TokenCache.Application.csproj" />
     <ProjectReference Include="..\TokenCache.Infrastructure\TokenCache.Infrastructure.csproj" />
   </ItemGroup>
 
