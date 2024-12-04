@@ -11,14 +11,14 @@ using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Application.Services
 {
-    public class UserService : IUserService
+    public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;  // Token işlemleri için
         private readonly IRedisCacheService _redisCacheService; // Redis işlemleri için
 
-        public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenService tokenService, IRedisCacheService redisCacheService)
+        public AuthService(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenService tokenService, IRedisCacheService redisCacheService)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
@@ -26,7 +26,7 @@ namespace TokenCache.Application.Services
             _redisCacheService = redisCacheService;
         }
 
-        public async Task<UserDto> LoginAsync(string username, string password)
+        public async Task<UserDto> LoginAsync(string username, Password password)
         {
             var user = await _userRepository.GetByUsernameAsync(username);
 

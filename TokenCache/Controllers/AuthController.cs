@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using TokenCache.Application.Interfaces;
-using TokenCache.Interfaces;
-using TokenCache.Models;
+using TokenCache.Domain.Entities;
 
 namespace TokenCache.Controllers
 {
@@ -12,15 +9,13 @@ namespace TokenCache.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        readonly IAuthService _authService;
+        private readonly IAuthService _authService;
         private readonly IRedisCacheService _redisCacheService;
 
-
-        public AuthController(IAuthService authService,IRedisCacheService redisCacheService)
+        public AuthController(IAuthService authService, IRedisCacheService redisCacheService)
         {
             _authService = authService;
             _redisCacheService = redisCacheService;
-
         }
 
         [HttpPost("LoginUser")]
@@ -29,15 +24,19 @@ namespace TokenCache.Controllers
         {
             var redisCheck = await _redisCacheService.GetAsync(request.Username);
 
-            if (!redisCheck.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(redisCheck))
             {
-                return BadRequest();
+                return Ok(new UserLoginResponse
+                {
+                    AuthToken = redisCheck
+                });
             }
 
-            var result = await _authService.LoginUserAsync(request);
+            var result = await _authService.LoginAsync(request.Username, request.Password);
+
             await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
 
-            return result;
+            return Ok(result);
         }
     }
 }

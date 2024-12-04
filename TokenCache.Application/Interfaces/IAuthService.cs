@@ -8,7 +8,7 @@ using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Application.Interfaces
 {
-    public interface IUserService
+    public interface IAuthService
     {
         Task<UserDto> RegisterAsync(string username, Password password);
         Task<UserDto> LoginAsync(string username, string password);

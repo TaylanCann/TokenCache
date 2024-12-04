@@ -5,18 +5,15 @@ using MongoDB.Driver;
 using StackExchange.Redis;
 using System.Text;
 using TokenCache.Application.Interfaces;
+using TokenCache.Application.Services;
 using TokenCache.Domain.Interfaces;
 using TokenCache.Infrastructure.Cache;
 using TokenCache.Infrastructure.Repositories;
-using TokenCache.Interfaces;
-using TokenCache.Models;
-using TokenCache.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<MongoDBSettings>(
-    builder.Configuration.GetSection("MongoDBSettings"));
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,7 +32,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddTransient<IAuthService, AuthService>();
-//builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
