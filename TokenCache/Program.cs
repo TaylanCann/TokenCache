@@ -14,42 +14,10 @@ using TokenCache.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddSingleton<IMongoClient>(sp =>
-    new MongoClient("mongodb://localhost:27017")); // MongoDB baðlantý URI'si
-builder.Services.AddScoped<IMongoDatabase>(sp =>
-    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheDb")); // Veritabaný adý
-
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var configuration = ConfigurationOptions.Parse("localhost:6379", true); // Redis URL
-    return ConnectionMultiplexer.Connect(configuration);
-});
-
-builder.Services.AddScoped(sp =>
-{
-    var connection = sp.GetRequiredService<IConnectionMultiplexer>();
-    return connection.GetDatabase(); // IDatabase
-});
-
-builder.Services.AddTransient<IPasswordHasher, PasswordHasher>(); // PasswordHasher sizin bir sýnýfýnýz olmalý
-
-
-builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-    ConnectionMultiplexer.Connect("localhost")); // Redis baðlantýsý
-
-builder.Services.AddAuthorization();
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "AspNetJWT", Version = "1.0" });
@@ -79,12 +47,45 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-IConfiguration configuration = builder.Configuration;
-var redisConnection = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
-builder.Services.AddSingleton<IConnectionMultiplexer>(redisConnection);
+// MongoDB services
+builder.Services.AddSingleton<IMongoClient>(sp =>
+    new MongoClient("mongodb://localhost:27017")); // MongoDB baðlantý URI'si
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheDb")); // Veritabaný adý
 
-builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
+// Redis services
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var configuration = ConfigurationOptions.Parse("localhost:6379", true); // Redis URL
+    return ConnectionMultiplexer.Connect(configuration);
+});
 
+builder.Services.AddScoped(sp =>
+{
+    var connection = sp.GetRequiredService<IConnectionMultiplexer>();
+    return connection.GetDatabase(); // IDatabase
+});
+
+// Application-specific services
+builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+
+// Authorization & Authentication
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey")),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 var app = builder.Build();
 
@@ -97,8 +98,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
