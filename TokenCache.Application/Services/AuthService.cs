@@ -27,6 +27,8 @@ namespace TokenCache.Application.Services
 
         public async Task<UserDto> LoginAsync(string username, string password)
         {
+
+
             var user = await _userRepository.GetByUsernameAsync(username);
 
             if (user == null)

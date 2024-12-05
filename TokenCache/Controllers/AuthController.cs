@@ -18,12 +18,14 @@ namespace TokenCache.Controllers
             _redisCacheService = redisCacheService;
         }
 
-        [HttpPost("LoginUser")]
+        [HttpPost("LoginUserAsync")]
         [AllowAnonymous]
         public async Task<ActionResult<UserLoginResponse>> LoginUserAsync([FromBody] User request)
         {
             var redisCheck = await _redisCacheService.GetAsync(request.Username);
 
+
+           
             if (!string.IsNullOrEmpty(redisCheck))
             {
                 return Ok(new UserLoginResponse
@@ -34,7 +36,7 @@ namespace TokenCache.Controllers
 
             var result = await _authService.LoginAsync(request.Username, request.Password);
 
-            //await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
+            await _redisCacheService.SetAsync(request.Username, result.Token, TimeSpan.FromHours(1));
 
             return Ok(result);
         }
