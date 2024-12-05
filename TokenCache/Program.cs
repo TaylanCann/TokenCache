@@ -7,6 +7,7 @@ using System.Text;
 using TokenCache.Application.Interfaces;
 using TokenCache.Application.Services;
 using TokenCache.Domain.Interfaces;
+using TokenCache.Domain.Services;
 using TokenCache.Infrastructure.Cache;
 using TokenCache.Infrastructure.Repositories;
 
@@ -25,6 +26,20 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheDb")); // Veritabaný adý
 
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var configuration = ConfigurationOptions.Parse("localhost:6379", true); // Redis URL
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
+builder.Services.AddScoped(sp =>
+{
+    var connection = sp.GetRequiredService<IConnectionMultiplexer>();
+    return connection.GetDatabase(); // IDatabase
+});
+
+builder.Services.AddTransient<IPasswordHasher, PasswordHasher>(); // PasswordHasher sizin bir sýnýfýnýz olmalý
+
 
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -33,6 +48,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 builder.Services.AddAuthorization();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
 builder.Services.AddSwaggerGen(c =>
 {

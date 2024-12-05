@@ -7,7 +7,6 @@ using TokenCache.Application.DTOs;
 using TokenCache.Application.Interfaces;
 using TokenCache.Domain.Entities;
 using TokenCache.Domain.Interfaces;
-using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Application.Services
 {
@@ -26,17 +25,18 @@ namespace TokenCache.Application.Services
             _redisCacheService = redisCacheService;
         }
 
-        public async Task<UserDto> LoginAsync(string username, Password password)
+        public async Task<UserDto> LoginAsync(string username, string password)
         {
             var user = await _userRepository.GetByUsernameAsync(username);
 
-            if (user == null || !user.VerifyPassword(password, _passwordHasher))
+            if (user == null)
                 return null;
 
             return new UserDto { Username = user.Username };
-        }       
+        }
 
-        public async Task<UserDto> RegisterAsync(string username, Password password)
+       
+        public async Task<UserDto> RegisterAsync(string username, string password)
         {
             if (await _userRepository.UserExistsAsync(username))
                 throw new Exception("Username already exists."); // Username varsa hata fırlatıyoruz

@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TokenCache.Domain.Interfaces;
-using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Domain.Services
 {

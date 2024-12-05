@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TokenCache.Application.DTOs;
-using TokenCache.Domain.ValueObjects;
 
 namespace TokenCache.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<UserDto> RegisterAsync(string username, Password password);
+        Task<UserDto> RegisterAsync(string username, string password);
         Task<UserDto> LoginAsync(string username, string password);
     }
 }

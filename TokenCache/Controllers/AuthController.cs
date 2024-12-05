@@ -34,7 +34,7 @@ namespace TokenCache.Controllers
 
             var result = await _authService.LoginAsync(request.Username, request.Password);
 
-            await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
+            //await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
 
             return Ok(result);
         }
