@@ -9,6 +9,7 @@ using TokenCache.Application.Services;
 using TokenCache.Domain.Interfaces;
 using TokenCache.Domain.Services;
 using TokenCache.Infrastructure.Cache;
+using TokenCache.Infrastructure.Middleware;
 using TokenCache.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -97,7 +98,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<CustomExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

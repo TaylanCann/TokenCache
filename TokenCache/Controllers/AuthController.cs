@@ -25,7 +25,6 @@ namespace TokenCache.Controllers
             var redisCheck = await _redisCacheService.GetAsync(request.Username);
 
 
-           
             if (!string.IsNullOrEmpty(redisCheck))
             {
                 return Ok(new UserLoginResponse

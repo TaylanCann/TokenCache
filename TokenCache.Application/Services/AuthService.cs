@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TokenCache.Application.DTOs;
+using TokenCache.Application.Exceptions;
 using TokenCache.Application.Interfaces;
 using TokenCache.Domain.Entities;
 using TokenCache.Domain.Interfaces;
@@ -27,12 +28,10 @@ namespace TokenCache.Application.Services
 
         public async Task<UserDto> LoginAsync(string username, string password)
         {
-
-
             var user = await _userRepository.GetByUsernameAsync(username);
 
             if (user == null)
-                return null;
+                throw UserNotFoundException.UserNotFoundForLogin(username);
 
             return new UserDto { Username = user.Username };
         }

@@ -19,8 +19,4 @@
     <ProjectReference Include="..\TokenCache.Infrastructure\TokenCache.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
