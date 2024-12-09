@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TokenCache.Application.DTOs;
+using TokenCache.Application.DTOs.UserDTOs;
 using TokenCache.Application.Exceptions;
 using TokenCache.Application.Interfaces;
 using TokenCache.Domain.Entities;
@@ -45,15 +45,16 @@ namespace TokenCache.Application.Services
             var user = new User(Guid.NewGuid().ToString(), username, password); // id oluşturuluyor
             await _userRepository.CreateAsync(user);
 
-            return new UserDto { Username = user.Username }; // Başarılı kayıt
-        }
-
-        public async Task<string> SignInAsync(string username)
-        {
             var token = await _tokenService.GenerateTokenAsync(username); // Token üret
             await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
 
-            return token; // Token'ı geri döndür
-        }       
+            return new UserDto 
+            { Username = user.Username,
+              AuthToken = token,
+              AccessTokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(1)), 
+              AuthenticateResult = true }; // Başarılı kayıt
+        }
+
+       
     }
 }

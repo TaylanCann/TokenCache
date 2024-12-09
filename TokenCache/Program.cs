@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient("mongodb://localhost:27017")); // MongoDB baðlantý URI'si
 builder.Services.AddScoped<IMongoDatabase>(sp =>
-    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheDb")); // Veritabaný adý
+    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
 
 // Redis services
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -98,7 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<CustomExceptionMiddleware>();
+app.UseMiddleware<PerformanceMiddleware>();
+//app.UseMiddleware<CustomExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

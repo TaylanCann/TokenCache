@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TokenCache.Application.DTOs.UserDTOs;
 using TokenCache.Application.Interfaces;
 using TokenCache.Domain.Entities;
 
@@ -35,7 +36,17 @@ namespace TokenCache.Controllers
 
             var result = await _authService.LoginAsync(request.Username, request.Password);
 
-            await _redisCacheService.SetAsync(request.Username, result.Token, TimeSpan.FromHours(1));
+            await _redisCacheService.SetAsync(request.Username, result.AuthToken, TimeSpan.FromHours(1));
+
+            return Ok(result);
+        }
+
+        [HttpPost("RegisterUserAsync")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDto>> RegisterUserAsync([FromBody] UserCreateDto request)
+        {
+           
+            var result = await _authService.RegisterAsync(request.Username, request.Password);          
 
             return Ok(result);
         }
