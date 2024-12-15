@@ -12,6 +12,7 @@ namespace TokenCache.Domain.Interfaces
        
         Task CreateAsync(User user);
         Task<User> GetByUsernameAsync(string username);
+        Task<User> LoginUserAsync(string username, string password);
         Task<bool> UserExistsAsync(string username);
 
     }

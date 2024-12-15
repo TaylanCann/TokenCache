@@ -30,6 +30,14 @@ namespace TokenCache.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<User> LoginUserAsync(string username, string password)
+        {
+            return await _userCollection
+            .Find(user => user.Username == username
+                  && user.Password == password )
+            .FirstOrDefaultAsync();            
+        }
+
         public async Task<bool> UserExistsAsync(string username) // Kullanıcı var mı kontrolü
         {
             var count = await _userCollection

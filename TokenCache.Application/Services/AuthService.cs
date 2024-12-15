@@ -32,6 +32,17 @@ namespace TokenCache.Application.Services
 
             if (user == null)
                 throw UserNotFoundException.UserNotFoundForLogin(username);
+            
+            var tokenCheck = await _redisCacheService.GetAsync(username);
+            if (tokenCheck == null)
+            {
+                var hassedPassword = _passwordHasher.HashPassword(password);
+                user = await _userRepository.LoginUserAsync(username, hassedPassword);
+
+                var token = await _tokenService.GenerateTokenAsync(username); // Token üret
+                await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
+            }
+
 
             return new UserDto { Username = user.Username };
         }
@@ -42,7 +53,8 @@ namespace TokenCache.Application.Services
             if (await _userRepository.UserExistsAsync(username))
                 throw new Exception("Username already exists."); // Username varsa hata fırlatıyoruz
 
-            var user = new User(Guid.NewGuid().ToString(), username, password); // id oluşturuluyor
+            var hassedPassword = _passwordHasher.HashPassword(password);
+            var user = new User(Guid.NewGuid().ToString(), username, hassedPassword); // id oluşturuluyor
             await _userRepository.CreateAsync(user);
 
             var token = await _tokenService.GenerateTokenAsync(username); // Token üret

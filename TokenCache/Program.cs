@@ -99,7 +99,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<PerformanceMiddleware>();
-//app.UseMiddleware<CustomExceptionMiddleware>();
+app.UseMiddleware<CustomExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
