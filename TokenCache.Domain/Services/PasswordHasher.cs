@@ -16,6 +16,8 @@ namespace TokenCache.Domain.Services
 
         public string HashPassword(string plainTextPassword)
         {
+            //Bu kullanıcı için türetilmiş bir kelime var mı yoksa kullanıcı kayıt mı oluyor kontrol edilecek.
+
             if (string.IsNullOrWhiteSpace(plainTextPassword))
                 throw new ArgumentException("Password cannot be empty.");
 
@@ -31,26 +33,10 @@ namespace TokenCache.Domain.Services
             Array.Copy(hash, 0, hashBytes, _saltLength, _hashLength);
 
             var hashString = Convert.ToBase64String(hashBytes);
-            return hashString; // Direkt Password nesnesi döndürülüyor
+            return hashString; 
         }
 
-        public bool VerifyPassword(string plainTextPassword, string storedHash)
-        {
-            byte[] hashBytes = Convert.FromBase64String(storedHash);
-            byte[] salt = new byte[_saltLength];
-            Array.Copy(hashBytes, 0, salt, 0, _saltLength);
 
-            using var hashAlgorithm = new Rfc2898DeriveBytes(plainTextPassword, salt, _iterations);
-            byte[] hash = hashAlgorithm.GetBytes(_hashLength);
-
-            for (int i = 0; i < _hashLength; i++)
-            {
-                if (hashBytes[i + _saltLength] != hash[i])
-                    return false;
-            }
-
-            return true;
-        }
     }
 
 

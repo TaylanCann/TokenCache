@@ -34,14 +34,28 @@ namespace TokenCache.Application.Services
                 throw UserNotFoundException.UserNotFoundForLogin(username);
             
             var token = await _redisCacheService.GetAsync(username);
+            string hassedPassword;
             if (token == null)
             {
-                var hassedPassword = _passwordHasher.HashPassword(password);
+                hassedPassword = _passwordHasher.HashPassword(password);
                 user = await _userRepository.LoginUserAsync(username, hassedPassword);
 
                 token = await _tokenService.GenerateTokenAsync(username); // Token üret
                 var a = _tokenService.ValidateTokenAsync(token);
                 await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
+            }
+
+            hassedPassword = _passwordHasher.HashPassword(password);
+            user = await _userRepository.LoginUserAsync(username, hassedPassword);
+            if (user!=null)
+            {
+                return new UserDto
+                {
+                    Username = user.Username,
+                    AuthToken = token,
+                    AccessTokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(1)),
+                    AuthenticateResult = true
+                };
             }
 
 
@@ -52,6 +66,8 @@ namespace TokenCache.Application.Services
                 AccessTokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(1)),
                 AuthenticateResult = true
             };
+
+
         }
 
        
