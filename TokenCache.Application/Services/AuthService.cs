@@ -33,38 +33,47 @@ namespace TokenCache.Application.Services
             if (user == null)
                 throw UserNotFoundException.UserNotFoundForLogin(username);
             
-            var tokenCheck = await _redisCacheService.GetAsync(username);
-            if (tokenCheck == null)
+            var token = await _redisCacheService.GetAsync(username);
+            if (token == null)
             {
                 var hassedPassword = _passwordHasher.HashPassword(password);
                 user = await _userRepository.LoginUserAsync(username, hassedPassword);
 
-                var token = await _tokenService.GenerateTokenAsync(username); // Token üret
+                token = await _tokenService.GenerateTokenAsync(username); // Token üret
+                var a = _tokenService.ValidateTokenAsync(token);
                 await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
             }
 
 
-            return new UserDto { Username = user.Username };
+            return new UserDto
+            {
+                Username = user.Username,
+                AuthToken = token,
+                AccessTokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(1)),
+                AuthenticateResult = true
+            };
         }
 
        
         public async Task<UserDto> RegisterAsync(string username, string password)
         {
             if (await _userRepository.UserExistsAsync(username))
-                throw new Exception("Username already exists."); // Username varsa hata fırlatıyoruz
+                throw new Exception("Username already exists."); 
 
             var hassedPassword = _passwordHasher.HashPassword(password);
-            var user = new User(Guid.NewGuid().ToString(), username, hassedPassword); // id oluşturuluyor
+            var user = new User(Guid.NewGuid().ToString(), username, hassedPassword); 
             await _userRepository.CreateAsync(user);
 
-            var token = await _tokenService.GenerateTokenAsync(username); // Token üret
-            await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
+            var token = await _tokenService.GenerateTokenAsync(username); 
+            await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); 
 
             return new UserDto 
-            { Username = user.Username,
+            { 
+              Username = user.Username,
               AuthToken = token,
               AccessTokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(1)), 
-              AuthenticateResult = true }; // Başarılı kayıt
+              AuthenticateResult = true 
+            }; // Başarılı kayıt
         }
 
        

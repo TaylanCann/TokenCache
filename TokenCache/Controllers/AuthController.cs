@@ -21,7 +21,7 @@ namespace TokenCache.Controllers
 
         [HttpPost("LoginUserAsync")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserLoginResponse>> LoginAsync([FromBody] User request)
+        public async Task<ActionResult<UserLoginResponse>> LoginAsync([FromBody] UserAuthDto request)
         {
            
             var result = await _authService.LoginAsync(request.Username, request.Password);
@@ -31,7 +31,7 @@ namespace TokenCache.Controllers
 
         [HttpPost("RegisterUserAsync")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDto>> RegisterUserAsync([FromBody] UserCreateDto request)
+        public async Task<ActionResult<UserDto>> RegisterUserAsync([FromBody] UserAuthDto request)
         {
            
             var result = await _authService.RegisterAsync(request.Username, request.Password);          

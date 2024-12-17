@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TokenCache.Application.DTOs.UserDTOs
 {
-    public class UserCreateDto
+    public class UserAuthDto
     {
         public string Username { get; set; }
         public string Password { get; set; }
