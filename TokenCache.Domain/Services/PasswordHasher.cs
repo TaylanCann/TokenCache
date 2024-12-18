@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 using TokenCache.Domain.Interfaces;
 
 namespace TokenCache.Domain.Services
@@ -33,7 +28,7 @@ namespace TokenCache.Domain.Services
             Array.Copy(hash, 0, hashBytes, _saltLength, _hashLength);
 
             var hashString = Convert.ToBase64String(hashBytes);
-            return hashString; 
+            return hashString;
         }
 
 
