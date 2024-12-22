@@ -23,11 +23,11 @@ namespace TokenCache.Infrastructure.Repositories
             await _wordCollection.InsertOneAsync(word);
         }
 
-        public async Task<Word> GetByIdAsync(int Id)
+        public async Task<bool> WordExistsAsync(string id)
         {
-            return await _wordCollection
-              .Find(word => word.UserId == Id)
-              .FirstOrDefaultAsync();
+            var count = await _wordCollection
+                 .CountDocumentsAsync(user => user.UserId == id);
+            return count > 0;
 
         }
     }

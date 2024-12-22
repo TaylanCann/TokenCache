@@ -9,7 +9,7 @@ namespace TokenCache.Domain.Interfaces
 {
     public interface IPasswordHasher
     {
-        string HashPassword(string plainTextPassword);
+        string HashPassword(User user,string plainTextPassword);
         string CreateWord();
     }
 }

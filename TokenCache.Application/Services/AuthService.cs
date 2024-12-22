@@ -37,7 +37,7 @@ namespace TokenCache.Application.Services
             string hassedPassword;
             if (token == null)
             {
-                hassedPassword = _passwordHasher.HashPassword(password);
+                hassedPassword = _passwordHasher.HashPassword(user,password);
                 user = await _userRepository.LoginUserAsync(username, hassedPassword);
 
                 token = await _tokenService.GenerateTokenAsync(username); // Token üret
@@ -45,7 +45,7 @@ namespace TokenCache.Application.Services
                 await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
             }
 
-            hassedPassword = _passwordHasher.HashPassword(password);
+            hassedPassword = _passwordHasher.HashPassword(user,password);
             user = await _userRepository.LoginUserAsync(username, hassedPassword);
             if (user!=null)
             {
