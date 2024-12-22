@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using TokenCache.Domain.Entities;
 using TokenCache.Domain.Interfaces;
 
 namespace TokenCache.Domain.Services
@@ -8,6 +9,8 @@ namespace TokenCache.Domain.Services
         private readonly int _iterations = 10000;  // Iteration sayısı
         private readonly int _saltLength = 16;     // Salt uzunluğu
         private readonly int _hashLength = 32;     // Hash uzunluğu
+
+        
 
         public string HashPassword(string plainTextPassword)
         {
@@ -30,7 +33,19 @@ namespace TokenCache.Domain.Services
             var hashString = Convert.ToBase64String(hashBytes);
             return hashString;
         }
+        public string CreateWord()
+        {
+            string word = string.Empty;
+           
+            var rnd = new Random();
+            for (int i = 0; i< 6; i++)
+    {
+                word += ((char)rnd.Next('A', 'Z')).ToString();
+            }
+            
+            return word;
 
+        }
 
     }
 

@@ -7,9 +7,11 @@ using TokenCache.Domain.Entities;
 
 namespace TokenCache.Domain.Interfaces
 {
-    public interface IPasswordHasher
+    public interface IWordRepository
     {
-        string HashPassword(string plainTextPassword);
-        string CreateWord();
+       
+        Task CreateAsync(Word word);
+        Task<Word> GetByIdAsync(int Id);        
+
     }
 }
