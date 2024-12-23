@@ -37,7 +37,7 @@ namespace TokenCache.Application.Services
             string hassedPassword;
             if (token == null)
             {
-                hassedPassword = _passwordHasher.HashPassword(user,password);
+                hassedPassword = await _passwordHasher.HashPassword(username, password);
                 user = await _userRepository.LoginUserAsync(username, hassedPassword);
 
                 token = await _tokenService.GenerateTokenAsync(username); // Token üret
@@ -45,7 +45,7 @@ namespace TokenCache.Application.Services
                 await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); // Redis'e kaydet
             }
 
-            hassedPassword = _passwordHasher.HashPassword(user,password);
+            hassedPassword = await _passwordHasher.HashPassword(username, password);
             user = await _userRepository.LoginUserAsync(username, hassedPassword);
             if (user!=null)
             {
@@ -76,7 +76,7 @@ namespace TokenCache.Application.Services
             if (await _userRepository.UserExistsAsync(username))
                 throw new Exception("Username already exists."); 
 
-            var hassedPassword = _passwordHasher.HashPassword(password);
+            var hassedPassword = await _passwordHasher.HashPassword(username,password);
             var user = new User(Guid.NewGuid().ToString(), username, hassedPassword); 
             await _userRepository.CreateAsync(user);
 

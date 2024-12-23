@@ -37,23 +37,32 @@ namespace TokenCache.Domain.Services
            
             var rnd = new Random();
             var rndCount = new Random();
-            rndCount.Next(5, 10).ToString();
-            int.Parse(rndCount);
-
-            for (int i = 0; i< rndCount; i++)
+            rndCount.Next(5, 10);
+            
+            for (int i = 0; i< rndCount.NextInt64(); i++)
             {
+                if (i==3)
+                {
+                    word += Password;
+                }
                 word += ((char)rnd.Next('A', 'Z')).ToString();
             }
 
+            var isRegist = _userRepository.UserExistsAsync(username).Result;
+            if (!isRegist)
+            {
+                await _wordRepository.CreateAsync(new Word { UserId = username, WordText = Password });
 
-
-            await _wordRepository.CreateAsync(new Word { UserId = username, WordText = word });
+            }
 
             return word;
 
         }
 
-        
+      
+
+
+
 
     }
 
