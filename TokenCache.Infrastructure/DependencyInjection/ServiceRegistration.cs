@@ -21,6 +21,7 @@ namespace TokenCache.Infrastructure.DependencyInjection
             var mongoDatabase = MongoDbConfiguration.ConfigureMongoDatabase(configuration);
             services.AddSingleton(mongoDatabase);
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWordRepository, WordRepository>();
 
             // Redis
             var redisConnection = RedisConfiguration.ConfigureRedis(configuration);

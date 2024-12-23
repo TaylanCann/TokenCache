@@ -70,11 +70,12 @@ builder.Services.AddScoped(sp =>
 });
 
 // Application-specific services
-builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<IWordRepository, WordRepository>();
 
 // Authorization & Authentication
 builder.Services.AddAuthorization();
