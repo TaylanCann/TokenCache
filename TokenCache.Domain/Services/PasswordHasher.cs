@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using TokenCache.Domain.Entities;
 using TokenCache.Domain.Interfaces;
 
@@ -6,11 +8,10 @@ namespace TokenCache.Domain.Services
 {
     public class PasswordHasher : IPasswordHasher
     {
-        private readonly int _iterations = 10000;  // Iteration sayısı
-        private readonly int _saltLength = 16;     // Salt uzunluğu
-        private readonly int _hashLength = 32;     // Hash uzunluğu
+        
         private readonly IWordRepository _wordRepository;
         private readonly IUserRepository _userRepository;
+        private readonly Random _random = new();
 
         public PasswordHasher(IWordRepository wordRepository, IUserRepository userRepository)
         {
@@ -18,51 +19,41 @@ namespace TokenCache.Domain.Services
             _userRepository = userRepository;
         }
 
-        public string HashPassword(User user, string plainTextPassword)
+        public async Task<string> HashPassword(string username,string Password)
         {
             //Bu kullanıcı için türetilmiş bir kelime var mı yoksa kullanıcı kayıt mı oluyor kontrol edilecek.
-            await checkUserExist(user);
+            ArgumentNullException.ThrowIfNull(Password);
 
-            ArgumentNullException.ThrowIfNull(user);           
-            ArgumentNullException.ThrowIfNull(plainTextPassword);
+            var saltedPassword = await SaltPassword(username,Password);
 
-            var checkUserRegister = _userRepository.UserExistsAsync(user.Username);
-
-            using var rng = RandomNumberGenerator.Create();
-            byte[] salt = new byte[_saltLength];
-            rng.GetBytes(salt);
-
-            using var hashAlgorithm = new Rfc2898DeriveBytes(plainTextPassword, salt, _iterations);
-            byte[] hash = hashAlgorithm.GetBytes(_hashLength);
-
-            byte[] hashBytes = new byte[_saltLength + _hashLength];
-            Array.Copy(salt, 0, hashBytes, 0, _saltLength);
-            Array.Copy(hash, 0, hashBytes, _saltLength, _hashLength);
-
-            var hashString = Convert.ToBase64String(hashBytes);
-            return hashString;
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(Password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
         }
-        public string CreateWord()
+        public async Task<string> SaltPassword(string username, string Password)
         {
             string word = string.Empty;
            
             var rnd = new Random();
-            for (int i = 0; i< 6; i++)
+            var rndCount = new Random();
+            rndCount.Next(5, 10).ToString();
+            int.Parse(rndCount);
+
+            for (int i = 0; i< rndCount; i++)
             {
                 word += ((char)rnd.Next('A', 'Z')).ToString();
             }
-            
+
+
+
+            await _wordRepository.CreateAsync(new Word { UserId = username, WordText = word });
+
             return word;
 
         }
 
-        private async bool checkUserExist(User user)
-        {
-            ArgumentNullException.ThrowIfNull(user);
-            var checkUserRegister = _userRepository.UserExistsAsync(user.Username);
-
-            return await checkUserRegister;
-        }
+        
 
     }
 
