@@ -11,7 +11,6 @@ namespace TokenCache.Domain.Services
         
         private readonly IWordRepository _wordRepository;
         private readonly IUserRepository _userRepository;
-        private readonly Random _random = new();
 
         public PasswordHasher(IWordRepository wordRepository, IUserRepository userRepository)
         {

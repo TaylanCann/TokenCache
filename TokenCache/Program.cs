@@ -12,6 +12,7 @@ using TokenCache.Infrastructure.Cache;
 using TokenCache.Infrastructure.Middleware;
 using TokenCache.Infrastructure.Repositories;
 using System.Security.Cryptography;
+using TokenCache.Domain.Entities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +56,13 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient("mongodb://localhost:27017")); // MongoDB baðlantý URI'si
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
+
+// MongoDB collections
+builder.Services.AddScoped<IMongoCollection<Word>>(sp =>
+{
+    var database = sp.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<Word>("Words");
+});
 
 // Redis services
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
