@@ -12,6 +12,7 @@ namespace TokenCache.Domain.Interfaces
        
         Task CreateAsync(Word word);
         Task<bool> WordExistsAsync(string id);
+        Task<Word> GetWordById(string id);
 
     }
 }

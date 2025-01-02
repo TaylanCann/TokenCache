@@ -30,5 +30,11 @@ namespace TokenCache.Infrastructure.Repositories
             return count > 0;
 
         }
+        public async Task<Word> GetWordById(string id)
+        {
+            var word = await _wordCollection.Find(x => x.UserId == id).FirstOrDefaultAsync();
+            return word;
+
+        }
     }
 }
