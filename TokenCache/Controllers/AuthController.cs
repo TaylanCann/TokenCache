@@ -29,6 +29,24 @@ namespace TokenCache.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Order")]
+        [AllowAnonymous]
+        public ActionResult<UserLoginResponse> Order()
+        {
+            return Ok();
+        }
+
+        [HttpPost("Order")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserLoginResponse>> Order([FromBody] UserAuthDto request)
+        {
+
+            var result = await _authService.LoginAsync(request.Username, request.Password);
+
+            return Ok(result);
+        }
+
+
         [HttpPost("RegisterUserAsync")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDto>> RegisterUserAsync([FromBody] UserAuthDto request)
