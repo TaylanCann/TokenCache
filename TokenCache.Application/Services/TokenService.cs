@@ -22,7 +22,7 @@ namespace TokenCache.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<string> GenerateTokenAsync(string username)
+        public string GenerateToken(string username)
         {
             var secretKey = _configuration["Jwt:SecretKey"];
             if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)

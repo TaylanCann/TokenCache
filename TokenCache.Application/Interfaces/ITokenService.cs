@@ -9,7 +9,7 @@ namespace TokenCache.Application.Interfaces
 {
     public interface ITokenService
     {
-        Task<string> GenerateTokenAsync(string username);
+        string GenerateToken(string username);
         ClaimsPrincipal ValidateTokenAsync(string token);
     }
 }
