@@ -17,5 +17,12 @@ namespace TokenCache.Infrastructure.Configurations
             var client = new MongoClient(connectionString);
             return client.GetDatabase(databaseName);
         }
+        public static IMongoDatabase ConfigureTestMongoDatabase(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("MongoDbSecondary");
+            var databaseName = configuration["TestMongoDBSettings:DatabaseName"];
+            var client = new MongoClient(connectionString);
+            return client.GetDatabase(databaseName);
+        }
     }
 }

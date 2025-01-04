@@ -13,6 +13,7 @@ namespace TokenCache.Infrastructure.Repositories
     {
         private readonly IMongoCollection<User> _userCollection;
 
+
         public UserRepository(IMongoDatabase database)
         {
             _userCollection = database.GetCollection<User>("Users"); // Koleksiyon adı: Users

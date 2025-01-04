@@ -57,6 +57,11 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
 
+builder.Services.AddSingleton<IMongoClient>(sp =>
+    new MongoClient("mongodb://localhost:27018")); // MongoDB baðlantý URI'si
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheTest")); // Veritabaný adý
+
 // MongoDB collections
 builder.Services.AddScoped<IMongoCollection<Word>>(sp =>
 {
