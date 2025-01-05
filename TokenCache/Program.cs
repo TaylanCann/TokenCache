@@ -13,6 +13,9 @@ using TokenCache.Infrastructure.Middleware;
 using TokenCache.Infrastructure.Repositories;
 using System.Security.Cryptography;
 using TokenCache.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using TokenCache.Infrastructure.DbContexts;
+using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,10 +60,9 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
 
-builder.Services.AddSingleton<IMongoClient>(sp =>
-    new MongoClient("mongodb://localhost:27018")); // MongoDB baðlantý URI'si
-builder.Services.AddScoped<IMongoDatabase>(sp =>
-    sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCacheTest")); // Veritabaný adý
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("NpgSqlConnection")));
+
 
 // MongoDB collections
 builder.Services.AddScoped<IMongoCollection<Word>>(sp =>

@@ -11,24 +11,18 @@ namespace TokenCache.Infrastructure.Services
 {
     public class MongoDbService
     {
-        private readonly IMongoDatabase _primaryDatabase;
-        private readonly IMongoDatabase _secondaryDatabase;
+        private readonly IMongoDatabase _database;
 
         public MongoDbService(IConfiguration configuration)
         {
-            _primaryDatabase = MongoDbConfiguration.ConfigureMongoDatabase(configuration);
-            _secondaryDatabase = MongoDbConfiguration.ConfigureTestMongoDatabase(configuration);
+            _database = MongoDbConfiguration.ConfigureMongoDatabase(configuration);
         }
 
         public void InsertRecord<T>(string collectionName, T record)
         {
             // Primary veritabanına kayıt
-            var primaryCollection = _primaryDatabase.GetCollection<T>(collectionName);
-            primaryCollection.InsertOne(record);
-
-            // Secondary veritabanına kayıt
-            var secondaryCollection = _secondaryDatabase.GetCollection<T>(collectionName);
-            secondaryCollection.InsertOne(record);
+            var collection = _database.GetCollection<T>(collectionName);
+            collection.InsertOne(record);         
         }
     }
 
