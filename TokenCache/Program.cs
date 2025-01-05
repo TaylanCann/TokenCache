@@ -11,11 +11,9 @@ using TokenCache.Domain.Services;
 using TokenCache.Infrastructure.Cache;
 using TokenCache.Infrastructure.Middleware;
 using TokenCache.Infrastructure.Repositories;
-using System.Security.Cryptography;
 using TokenCache.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using TokenCache.Infrastructure.DbContexts;
-using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
