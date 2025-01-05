@@ -13,12 +13,10 @@ namespace TokenCache.Application.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IRedisCacheService _redisCacheService;
         private readonly IConfiguration _configuration;
 
-        public TokenService(IRedisCacheService redisCacheService, IConfiguration configuration) 
+        public TokenService(IConfiguration configuration) 
         {
-            _redisCacheService = redisCacheService;
             _configuration = configuration;
         }
 
