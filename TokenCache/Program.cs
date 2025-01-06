@@ -59,8 +59,14 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("NpgSqlConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("NpgSqlConnection"),
+        b => b.MigrationsAssembly("TokenCache.Infrastructure")));
 
+var options = new DbContextOptionsBuilder<AppDbContext>()
+           .UseNpgsql("NpgSqlConnection")
+           .Options;
+
+builder.Services.AddSingleton(new AppDbContext(options));
 
 // MongoDB collections
 builder.Services.AddScoped<IMongoCollection<Word>>(sp =>
@@ -83,13 +89,16 @@ builder.Services.AddScoped(sp =>
 });
 
 // Application-specific services
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IWordRepository, WordRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<DbContext, AppDbContext>();
+
+
 
 // Authorization & Authentication
 builder.Services.AddAuthorization();
