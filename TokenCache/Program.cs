@@ -89,6 +89,7 @@ builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IWordRepository, WordRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Authorization & Authentication
 builder.Services.AddAuthorization();

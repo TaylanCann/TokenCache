@@ -14,7 +14,7 @@ namespace TokenCache.Infrastructure.DbContexts
         {
         }
 
-        public DbSet<User> Products { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
