@@ -10,10 +10,15 @@ namespace TokenCache.Domain.Interfaces
     public interface IUserRepository
     {
        
-        Task CreateAsync(User user);
-        Task<User> GetByUsernameAsync(string username);
-        Task<User> LoginUserAsync(string username, string password);
-        Task<bool> UserExistsAsync(string username);
+        Task CreateAsyncMongo(User user);
+        Task<User> GetByUsernameAsyncMongo(string username);
+        Task<User> LoginUserAsyncMongo(string username, string password);
+        Task<bool> UserExistsAsyncMongo(string username);
+
+        Task CreateAsyncPostgre(User user);
+        Task<User> GetByUsernameAsyncPostgre(string username);
+        Task<User> LoginUserAsyncPostgre(string username, string password);
+        Task<bool> UserExistsAsyncPostgre(string username);
 
     }
 }

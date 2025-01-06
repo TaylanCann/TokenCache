@@ -14,7 +14,22 @@ namespace TokenCache.Infrastructure.DbContexts
         {
         }
 
-        public DbSet<User> Products { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Özel yapılandırmalar (opsiyonel)
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .IsRequired();
+        }
 
     }
 }

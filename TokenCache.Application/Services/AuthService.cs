@@ -28,7 +28,7 @@ namespace TokenCache.Application.Services
 
         public async Task<UserDto> LoginAsync(string username, string password)
         {
-            var user = await _userRepository.GetByUsernameAsync(username);
+            var user = await _userRepository.GetByUsernameAsyncMongo(username);
 
             if (user == null)
                 throw UserNotFoundException.UserNotFoundForLogin(username);
@@ -38,7 +38,7 @@ namespace TokenCache.Application.Services
             if (token == null)
             {
                 hassedPassword = await _passwordHasher.HashPassword(password);
-                user = await _userRepository.LoginUserAsync(username, hassedPassword);
+                user = await _userRepository.LoginUserAsyncMongo(username, hassedPassword);
 
                 token =  _tokenService.GenerateToken(username); // Token üret
                 var a = _tokenService.ValidateTokenAsync(token);
@@ -46,7 +46,7 @@ namespace TokenCache.Application.Services
             }
 
             hassedPassword = await _passwordHasher.HashPassword(password);
-            user = await _userRepository.LoginUserAsync(username, hassedPassword);
+            user = await _userRepository.LoginUserAsyncMongo(username, hassedPassword);
             if (user!=null)
             {
                 return new UserDto
@@ -73,12 +73,13 @@ namespace TokenCache.Application.Services
        
         public async Task<UserDto> RegisterAsync(string username, string password)
         {
-            if (await _userRepository.UserExistsAsync(username))
+            if (await _userRepository.UserExistsAsyncMongo(username))
                 throw new Exception("Username already exists."); 
 
             var hassedPassword = await _passwordHasher.HashPassword(password);
             var user = new User(Guid.NewGuid().ToString(), username, hassedPassword); 
-            await _userRepository.CreateAsync(user);
+            await _userRepository.CreateAsyncMongo(user);
+            await _userRepository.CreateAsyncPostgre(user);
 
             var token =     _tokenService.GenerateToken(username); 
             await _redisCacheService.SetAsync(username, token, TimeSpan.FromHours(1)); 
