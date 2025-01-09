@@ -58,11 +58,14 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("TokenCache")); // Veritabaný adý
 
-var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseNpgsql("NpgSqlConnection")
-           .Options;
 
-builder.Services.AddSingleton(new AppDbContext(options));
+// DbContext'i DI container'a ekleyin
+var connectionString = builder.Configuration.GetConnectionString("NpgSqlConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+
 
 
 // MongoDB collections
